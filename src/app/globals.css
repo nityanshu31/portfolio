@@ -1,26 +1,24 @@
 @import "tailwindcss";
 
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* Background (same identity, just lifted) */
+  --bg: 245, 247, 250;
+  --bg-secondary: 234, 240, 247;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* KEEP brand EXACT (this is your logo identity) */
+  --primary: 31, 95, 139;
+  --primary-light: 79, 163, 209;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+  /* Accent (slightly softer, same feel) */
+  --accent: 0, 209, 255;
+  --accent-alt: 124, 58, 237;
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Text (just softened from dark theme) */
+  --text: 17, 24, 39;
+  --text-secondary: 75, 85, 99;
+  --text-muted: 107, 114, 128;
+
+  /* Borders (lighter version of your old dark border) */
+  --border: 203, 213, 225;
 }
