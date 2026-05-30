@@ -48,17 +48,35 @@ export default function Hero() {
   }, [])
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-[rgba(var(--primary),0.05)] to-transparent">
-      {/* Background Animation */}
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+      {/* Video Background */}
+      <div className="absolute inset-0 w-full h-full">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+          key={Math.random()} // Force video reload if needed
+        >
+          {/* Correct path: video should be in public/assets/ folder */}
+          <source src="/assets/18069233-uhd_2160_3840_24fps.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/50"></div>
+      </div>
+
+      {/* Background Animation (optional - can remove if video is enough) */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-[rgb(var(--primary))] rounded-full filter blur-[100px] opacity-20 animate-pulse"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[rgb(var(--accent))] rounded-full filter blur-[100px] opacity-20 animate-pulse delay-1000"></div>
       </div>
 
-      <div className="relative max-w-[1400px] mx-auto px-4 md:px-6 lg:px-8 w-full text-center">
+      <div className="relative max-w-[1400px] mx-auto px-4 md:px-6 lg:px-8 w-full text-center z-10">
         <div className={`w-full transition-all duration-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-[rgba(var(--primary),0.1)] rounded-full px-4 py-1.5 mb-6">
+          <div className="inline-flex items-center gap-2 bg-[rgba(var(--primary),0.1)] rounded-full px-4 py-1.5 mb-6 backdrop-blur-sm">
             <span className="w-2 h-2 bg-[rgb(var(--primary))] rounded-full animate-pulse"></span>
             <span className="text-xs font-medium text-[rgb(var(--primary))]">Digital Innovation Hub</span>
           </div>
@@ -69,12 +87,12 @@ export default function Hero() {
               Your Tech Partner for
             </span>
             <br />
-            <span className="text-[rgb(var(--text))]">
+            <span className="text-white">
               Scalable Business Growth
             </span>
           </h1>
           
-          <p className="text-base md:text-lg text-[rgb(var(--text-secondary))] mb-8 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-gray-200 mb-8 max-w-2xl mx-auto">
             We help businesses thrive in the digital age with cutting-edge solutions, innovative strategies, and exceptional service.
           </p>
           
@@ -96,28 +114,28 @@ export default function Hero() {
           </div>
 
           {/* Stats with Counter Animation - Centered */}
-          <div className="grid grid-cols-3 gap-6 md:gap-12 pt-8 border-t border-[rgba(var(--border),0.3)] max-w-2xl mx-auto">
+          <div className="grid grid-cols-3 gap-6 md:gap-12 pt-8 border-t border-white/20 max-w-2xl mx-auto">
             <div>
-              <p className="text-2xl md:text-3xl font-bold text-[rgb(var(--text))]">
+              <p className="text-2xl md:text-3xl font-bold text-white">
                 {counts.projects}+
               </p>
-              <p className="text-xs md:text-sm text-[rgb(var(--text-muted))]">Projects Completed</p>
+              <p className="text-xs md:text-sm text-gray-300">Projects Completed</p>
             </div>
             <div>
-              <p className="text-2xl md:text-3xl font-bold text-[rgb(var(--text))]">
+              <p className="text-2xl md:text-3xl font-bold text-white">
                 {counts.clients}+
               </p>
-              <p className="text-xs md:text-sm text-[rgb(var(--text-muted))]">Happy Clients</p>
+              <p className="text-xs md:text-sm text-gray-300">Happy Clients</p>
             </div>
             <div>
-              <p className="text-2xl md:text-3xl font-bold text-[rgb(var(--text))]">
+              <p className="text-2xl md:text-3xl font-bold text-white">
                 {counts.support}/7
               </p>
-              <p className="text-xs md:text-sm text-[rgb(var(--text-muted))]">Support</p>
+              <p className="text-xs md:text-sm text-gray-300">Support</p>
             </div>
           </div>
         </div>
       </div>
     </section>
   )
-}
+} 
