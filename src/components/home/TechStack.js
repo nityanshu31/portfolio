@@ -6,36 +6,36 @@ import { motion } from 'framer-motion'
 import Section from './Section'
 
 const technologies = [
-  { name: 'React', icon: '⚛️', color: '#61DAFB', category: 'Frontend' },
-  { name: 'Next.js', icon: '▲', color: '#000000', category: 'Frontend' },
-  { name: 'Vue.js', icon: '🟢', color: '#42B883', category: 'Frontend' },
-  { name: 'Angular', icon: '🅰️', color: '#DD0031', category: 'Frontend' },
-  { name: 'Node.js', icon: '🟢', color: '#339933', category: 'Backend' },
-  { name: 'Python', icon: '🐍', color: '#3776AB', category: 'Backend' },
-  { name: 'JavaScript', icon: '📜', color: '#F7DF1E', category: 'Languages' },
-  { name: 'TypeScript', icon: '📘', color: '#3178C6', category: 'Languages' },
-  { name: 'Tailwind CSS', icon: '🎨', color: '#06B6D4', category: 'Styling' },
-  { name: 'GraphQL', icon: '📊', color: '#E10098', category: 'API' },
-  { name: 'MongoDB', icon: '🍃', color: '#47A248', category: 'Database' },
-  { name: 'PostgreSQL', icon: '🐘', color: '#4169E1', category: 'Database' },
-  { name: 'MySQL', icon: '🐬', color: '#4479A1', category: 'Database' },
-  { name: 'Redis', icon: '🔥', color: '#DC382D', category: 'Database' },
-  { name: 'AWS', icon: '☁️', color: '#FF9900', category: 'Cloud' },
-  { name: 'Docker', icon: '🐳', color: '#2496ED', category: 'DevOps' },
-  { name: 'Kubernetes', icon: '⚓', color: '#326CE5', category: 'DevOps' },
-  { name: 'Terraform', icon: '🏗️', color: '#7B42BC', category: 'DevOps' },
-  { name: 'Jenkins', icon: '🔧', color: '#D33833', category: 'CI/CD' },
-  { name: 'GitHub Actions', icon: '⚡', color: '#2088FF', category: 'CI/CD' },
-  { name: 'Figma', icon: '🎨', color: '#F24E1E', category: 'Design' },
-  { name: 'Firebase', icon: '🔥', color: '#FFCA28', category: 'Backend' },
-  { name: 'Supabase', icon: '🪄', color: '#3ECF8E', category: 'Backend' },
-  { name: 'Prisma', icon: '🗄️', color: '#2D3748', category: 'ORM' },
-  { name: 'Vercel', icon: '▲', color: '#000000', category: 'Hosting' },
-  { name: 'Netlify', icon: '🚀', color: '#00C7B7', category: 'Hosting' },
-  { name: 'Webpack', icon: '📦', color: '#8DD6F9', category: 'Build Tools' },
-  { name: 'Babel', icon: '➡️', color: '#F9DC3E', category: 'Build Tools' },
-  { name: 'Jest', icon: '✅', color: '#C21325', category: 'Testing' },
-  { name: 'Cypress', icon: '🧪', color: '#17202C', category: 'Testing' }
+  { name: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', color: '#61DAFB', category: 'Frontend' },
+  { name: 'Next.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg', color: '#000000', category: 'Frontend' },
+  { name: 'Vue.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg', color: '#42B883', category: 'Frontend' },
+  { name: 'Angular', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg', color: '#DD0031', category: 'Frontend' },
+  { name: 'Node.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg', color: '#339933', category: 'Backend' },
+  { name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', color: '#3776AB', category: 'Backend' },
+  { name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg', color: '#F7DF1E', category: 'Languages' },
+  { name: 'TypeScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg', color: '#3178C6', category: 'Languages' },
+  { name: 'Tailwind CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg', color: '#06B6D4', category: 'Styling' },
+  { name: 'GraphQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg', color: '#E10098', category: 'API' },
+  { name: 'MongoDB', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg', color: '#47A248', category: 'Database' },
+  { name: 'PostgreSQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg', color: '#4169E1', category: 'Database' },
+  { name: 'MySQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg', color: '#4479A1', category: 'Database' },
+  { name: 'Redis', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg', color: '#DC382D', category: 'Database' },
+  { name: 'AWS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg', color: '#FF9900', category: 'Cloud' },
+  { name: 'Docker', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg', color: '#2496ED', category: 'DevOps' },
+  { name: 'Kubernetes', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg', color: '#326CE5', category: 'DevOps' },
+  { name: 'Terraform', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg', color: '#7B42BC', category: 'DevOps' },
+  { name: 'Jenkins', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jenkins/jenkins-original.svg', color: '#D33833', category: 'CI/CD' },
+  { name: 'GitHub Actions', icon: 'https://github.githubassets.com/images/modules/site/icons/actions.svg', color: '#2088FF', category: 'CI/CD' },
+  { name: 'Figma', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg', color: '#F24E1E', category: 'Design' },
+  { name: 'Firebase', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg', color: '#FFCA28', category: 'Backend' },
+  { name: 'Supabase', icon: 'https://avatars.githubusercontent.com/u/54469796?s=200&v=4', color: '#3ECF8E', category: 'Backend' },
+  { name: 'Prisma', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prisma/prisma-original.svg', color: '#2D3748', category: 'ORM' },
+  { name: 'Vercel', icon: 'https://assets.vercel.com/image/upload/v1662134759/vercel-logotype-dark.png', color: '#000000', category: 'Hosting' },
+  { name: 'Netlify', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/netlify/netlify-original.svg', color: '#00C7B7', category: 'Hosting' },
+  { name: 'Webpack', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/webpack/webpack-original.svg', color: '#8DD6F9', category: 'Build Tools' },
+  { name: 'Babel', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/babel/babel-original.svg', color: '#F9DC3E', category: 'Build Tools' },
+  { name: 'Jest', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jest/jest-plain.svg', color: '#C21325', category: 'Testing' },
+  { name: 'Cypress', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cypressio/cypressio-original.svg', color: '#17202C', category: 'Testing' }
 ]
 
 const categories = ['All', 'Frontend', 'Backend', 'Database', 'DevOps', 'Cloud', 'Design', 'Testing', 'Languages', 'API', 'Styling', 'CI/CD', 'ORM', 'Hosting', 'Build Tools']
@@ -99,19 +99,18 @@ export default function TechStack() {
               
               {/* Icon Container */}
               <motion.div
-                className="relative mb-2 flex items-center justify-center"
+                className="relative mb-2 flex items-center justify-center h-12"
                 whileHover={{ scale: 1.1, rotate: [0, -5, 5, 0] }}
                 transition={{ duration: 0.3 }}
               >
-                <div 
-                  className="text-4xl transition-all duration-300"
+                <img 
+                  src={tech.icon}
+                  alt={tech.name}
+                  className="w-10 h-10 object-contain transition-all duration-300"
                   style={{ 
-                    color: tech.color,
-                    textShadow: `0 0 10px ${tech.color}40`
+                    filter: `drop-shadow(0 0 5px ${tech.color}80)`
                   }}
-                >
-                  {tech.icon}
-                </div>
+                />
               </motion.div>
               
               {/* Tech Name */}

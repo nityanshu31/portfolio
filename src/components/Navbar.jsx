@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Image from 'next/image'
 
 export default function Navbar() {
@@ -10,7 +10,9 @@ export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState(null)
   const [mobileDropdownState, setMobileDropdownState] = useState(null)
   const [windowWidth, setWindowWidth] = useState(0)
+  const timeoutRef = useRef(null)
   const pathname = usePathname()
+  const router = useRouter()
 
   useEffect(() => {
     const handleResize = () => {
@@ -18,6 +20,7 @@ export default function Navbar() {
       if (window.innerWidth > 1024) {
         setIsOpen(false)
         setMobileDropdownState(null)
+        setActiveDropdown(null)
       }
     }
 
@@ -26,6 +29,9 @@ export default function Navbar() {
 
     return () => {
       window.removeEventListener('resize', handleResize)
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
     }
   }, [])
 
@@ -50,6 +56,39 @@ export default function Navbar() {
     setIsOpen(!isOpen)
   }
 
+  const handleDropdownEnter = useCallback((href) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
+    setActiveDropdown(href)
+  }, [])
+
+  const handleDropdownLeave = useCallback(() => {
+    timeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null)
+    }, 150)
+  }, [])
+
+  const handleDropdownItemClick = useCallback((href) => {
+    setActiveDropdown(null)
+    router.push(href)
+  }, [router])
+
+  const handleMobileLinkClick = useCallback((link) => {
+    if (link.dropdown && link.dropdown.length > 0) {
+      setMobileDropdownState(mobileDropdownState === link.href ? null : link.href)
+    } else {
+      setIsOpen(false)
+      router.push(link.href)
+    }
+  }, [mobileDropdownState, router])
+
+  const handleMobileDropdownClick = useCallback((href) => {
+    setIsOpen(false)
+    router.push(href)
+  }, [router])
+
   const navLinks = [
     {
       href: '/',
@@ -71,9 +110,9 @@ export default function Navbar() {
         </svg>
       ),
       dropdown: [
-        { href: '/about/company', label: 'Our Company' },
+        { href: '/about', label: 'Our Company' },
         { href: '/about/team', label: 'Leadership Team' },
-        { href: '/about/careers', label: 'Careers', badge: 'We\'re hiring' },
+        // { href: '/about/careers', label: 'Careers', badge: 'We\'re hiring' },
       ]
     },
     {
@@ -88,8 +127,8 @@ export default function Navbar() {
       dropdown: [
         { href: '/services/web-dev', label: 'Web Development' },
         { href: '/services/mobile', label: 'Mobile Apps' },
-        { href: '/services/cloud', label: 'Cloud Solutions' },
-        { href: '/services/ai', label: 'AI & Machine Learning', new: true },
+        { href: '/services/testing', label: 'Testing Services' },
+        // { href: '/services/ai', label: 'AI & Machine Learning', new: true },
       ]
     },
     {
@@ -103,9 +142,8 @@ export default function Navbar() {
         </svg>
       ),
       dropdown: [
-        { href: '/portfolio/case-studies', label: 'Case Studies' },
+        { href: '/portfolio', label: 'Our Work' },
         { href: '/portfolio/testimonials', label: 'Testimonials' },
-        { href: '/portfolio/showcase', label: 'Project Showcase' },
       ]
     },
     {
@@ -194,6 +232,46 @@ export default function Navbar() {
           background: rgba(var(--primary), 0.3);
           border-radius: 4px;
         }
+
+        /* Dropdown container styles */
+        .dropdown-container {
+          position: relative;
+        }
+
+        .dropdown-menu {
+          position: absolute;
+          top: calc(100% + 8px);
+          left: 0;
+          min-width: ${isTablet ? '200px' : '240px'};
+          background: rgba(var(--bg), 0.98);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(var(--border), 0.5);
+          border-radius: 12px;
+          box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+          overflow: hidden;
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(-10px);
+          transition: all 200ms ease-in-out;
+          pointer-events: none;
+          z-index: 100;
+        }
+
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-menu.visible {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+          pointer-events: auto;
+        }
+
+        /* Ensure dropdown stays open when hovering over menu items */
+        .dropdown-menu:hover {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+          pointer-events: auto;
+        }
       `}</style>
 
       <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ease-in-out backdrop-blur-[20px] bg-[rgba(var(--bg),0.98)] border-b-[rgba(var(--border),0.8)] shadow-md border-b`}>
@@ -220,60 +298,74 @@ export default function Navbar() {
                 </span>
               </div>
             </Link>
+
             {/* Desktop Navigation */}
             <div className={`${isDesktop ? 'flex' : 'hidden'} gap-1 md:gap-4 items-center`}>
               {navLinks.map((link) => {
                 const isActive = pathname === link.href || pathname?.startsWith(link.href + '/')
                 const hasDropdown = link.dropdown && link.dropdown.length > 0
-                const isDropdownOpen = activeDropdown === link.href
 
-                return (
-                  <div
-                    key={link.href}
-                    className="relative"
-                    onMouseEnter={() => hasDropdown && setActiveDropdown(link.href)}
-                    onMouseLeave={() => hasDropdown && setActiveDropdown(null)}
-                  >
-                    <Link
-                      href={link.href}
-                      className={`nav-link relative ${isActive ? 'text-[rgb(var(--primary))] bg-[rgba(var(--primary),0.08)]' : 'text-[rgb(var(--text-secondary))]'} font-medium ${isTablet ? 'text-[13px] px-3 py-1.5' : 'text-sm px-4 py-2'} rounded-lg transition-all duration-200 cursor-pointer flex items-center gap-1.5 md:gap-2 whitespace-nowrap`}
+                if (hasDropdown) {
+                  return (
+                    <div
+                      key={link.href}
+                      className="dropdown-container"
+                      onMouseEnter={() => handleDropdownEnter(link.href)}
+                      onMouseLeave={handleDropdownLeave}
                     >
-                      {link.icon}
-                      {link.label}
-                      {hasDropdown && (
+                      <Link
+                        href={link.href}
+                        className={`nav-link relative ${isActive ? 'text-[rgb(var(--primary))] bg-[rgba(var(--primary),0.08)]' : 'text-[rgb(var(--text-secondary))]'} font-medium ${isTablet ? 'text-[13px] px-3 py-1.5' : 'text-sm px-4 py-2'} rounded-lg transition-all duration-200 cursor-pointer flex items-center gap-1.5 md:gap-2 whitespace-nowrap`}
+                      >
+                        {link.icon}
+                        {link.label}
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="ml-0.5">
                           <path d="M6 9L12 15L18 9" />
                         </svg>
-                      )}
-                      {isActive && !hasDropdown && (
-                        <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-gradient-to-r from-[rgb(var(--primary))] to-[rgb(var(--accent))] rounded-full"></span>
-                      )}
-                    </Link>
+                        {isActive && (
+                          <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-gradient-to-r from-[rgb(var(--primary))] to-[rgb(var(--accent))] rounded-full"></span>
+                        )}
+                      </Link>
 
-                    {hasDropdown && (
-                      <div className={`absolute top-[calc(100%+8px)] left-0 ${isTablet ? 'min-w-[200px]' : 'min-w-[240px]'} bg-[rgba(var(--bg),0.98)] backdrop-blur-[20px] border border-[rgba(var(--border),0.5)] rounded-xl shadow-[0_20px_40px_-12px_rgba(0,0,0,0.15)] overflow-hidden transition-all duration-200 ${isDropdownOpen ? 'opacity-100 visible translate-y-0 pointer-events-auto' : 'opacity-0 invisible -translate-y-2.5 pointer-events-none'
-                        }`}>
+                      <div className={`dropdown-menu ${activeDropdown === link.href ? 'visible' : ''}`}>
                         {link.dropdown.map((item) => (
-                          <Link
+                          <button
                             key={item.href}
-                            href={item.href}
-                            className="dropdown-item flex justify-between items-center no-underline text-[rgb(var(--text-secondary))] transition-all duration-200 cursor-pointer hover:bg-[rgba(var(--primary),0.05)] hover:text-[rgb(var(--primary))]"
+                            onClick={() => handleDropdownItemClick(item.href)}
+                            className="dropdown-item w-full flex justify-between items-center no-underline text-[rgb(var(--text-secondary))] transition-all duration-200 cursor-pointer hover:bg-[rgba(var(--primary),0.05)] hover:text-[rgb(var(--primary))]"
                           >
                             <span className={isTablet ? 'py-2 px-3.5 text-[13px]' : 'py-2.5 px-4 text-sm'}>{item.label}</span>
                             {item.badge && <span className="text-[10px] py-0.5 px-1.5 bg-gradient-to-r from-[rgb(var(--primary))] to-[rgb(var(--accent))] text-white rounded-full font-semibold mr-2">{item.badge}</span>}
                             {item.new && <span className="text-[9px] py-0.5 px-1.5 bg-[rgba(var(--accent),0.2)] text-[rgb(var(--accent))] rounded-full font-bold uppercase mr-2">New</span>}
-                          </Link>
+                          </button>
                         ))}
                       </div>
+                    </div>
+                  )
+                }
+
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`nav-link relative ${isActive ? 'text-[rgb(var(--primary))] bg-[rgba(var(--primary),0.08)]' : 'text-[rgb(var(--text-secondary))]'} font-medium ${isTablet ? 'text-[13px] px-3 py-1.5' : 'text-sm px-4 py-2'} rounded-lg transition-all duration-200 cursor-pointer flex items-center gap-1.5 md:gap-2 whitespace-nowrap`}
+                  >
+                    {link.icon}
+                    {link.label}
+                    {isActive && (
+                      <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-gradient-to-r from-[rgb(var(--primary))] to-[rgb(var(--accent))] rounded-full"></span>
                     )}
-                  </div>
+                  </Link>
                 )
               })}
             </div>
 
             {/* Desktop CTA */}
             <div className={`${isDesktop ? 'flex' : 'hidden'} gap-3 items-center`}>
-              <button className="btn-primary inline-flex items-center gap-2 bg-gradient-to-r from-[rgb(var(--primary))] to-[rgb(var(--primary-light))] text-white font-semibold rounded-xl shadow-[0_2px_8px_rgba(var(--primary),0.2)] whitespace-nowrap transition-all duration-300 py-2.5 px-6 text-sm">
+              <button 
+                onClick={() => router.push('/get-started')}
+                className="btn-primary inline-flex items-center gap-2 bg-gradient-to-r from-[rgb(var(--primary))] to-[rgb(var(--primary-light))] text-white font-semibold rounded-xl shadow-[0_2px_8px_rgba(var(--primary),0.2)] whitespace-nowrap transition-all duration-300 py-2.5 px-6 text-sm"
+              >
                 Get Started
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M5 12H19M19 12L13 6M19 12L13 18" />
@@ -335,14 +427,7 @@ export default function Navbar() {
                       ? 'text-[rgb(var(--primary))] bg-[rgba(var(--primary),0.1)]'
                       : 'text-[rgb(var(--text-secondary))] bg-transparent'
                     } ${isMobile ? 'py-3 px-3.5 text-[15px]' : 'py-3.5 px-4 text-base'} font-medium`}
-                  onClick={() => {
-                    if (hasDropdown) {
-                      setMobileDropdownState(isDropdownOpen ? null : link.href)
-                    } else {
-                      setIsOpen(false)
-                      window.location.href = link.href
-                    }
-                  }}
+                  onClick={() => handleMobileLinkClick(link)}
                 >
                   {link.icon}
                   {link.label}
@@ -356,17 +441,16 @@ export default function Navbar() {
                 {hasDropdown && (
                   <div className={`flex flex-col gap-1 overflow-hidden transition-all duration-300 ${isDropdownOpen ? 'max-h-[300px]' : 'max-h-0'}`} style={{ paddingLeft: isMobile ? 40 : 48 }}>
                     {link.dropdown.map((item) => (
-                      <Link
+                      <button
                         key={item.href}
-                        href={item.href}
-                        className={`flex justify-between items-center text-[rgb(var(--text-secondary))] transition-all duration-200 ${isMobile ? 'py-2.5 px-3.5 text-[15px]' : 'py-2.5 px-4 text-sm'}`}
+                        onClick={() => handleMobileDropdownClick(item.href)}
+                        className={`flex justify-between items-center text-[rgb(var(--text-secondary))] transition-all duration-200 w-full text-left ${isMobile ? 'py-2.5 px-3.5 text-[15px]' : 'py-2.5 px-4 text-sm'}`}
                         style={{ paddingLeft: isMobile ? 40 : 48 }}
-                        onClick={() => setIsOpen(false)}
                       >
                         <span>{item.label}</span>
                         {item.badge && <span className="text-[10px] py-0.5 px-1.5 bg-gradient-to-r from-[rgb(var(--primary))] to-[rgb(var(--accent))] text-white rounded-full font-semibold">{item.badge}</span>}
                         {item.new && <span className="text-[9px] py-0.5 px-1.5 bg-[rgba(var(--accent),0.2)] text-[rgb(var(--accent))] rounded-full font-bold uppercase">New</span>}
-                      </Link>
+                      </button>
                     ))}
                   </div>
                 )}
@@ -377,7 +461,7 @@ export default function Navbar() {
             className="mobile-btn-primary w-full py-3.5 md:py-4 px-4 bg-gradient-to-r from-[rgb(var(--primary))] to-[rgb(var(--primary-light))] text-white font-semibold rounded-xl text-center transition-all duration-300 mt-4"
             onClick={() => {
               setIsOpen(false)
-              window.location.href = '/get-started'
+              router.push('/get-started')
             }}
           >
             Get Started

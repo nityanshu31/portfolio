@@ -54,16 +54,48 @@ export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false)
   const [focusedField, setFocusedField] = useState(null)
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    setIsSubmitting(false)
-    setSubmitted(true)
-    setTimeout(() => setSubmitted(false), 5000)
-    setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    setIsSubmitting(true);
+
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      setSubmitted(true);
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      });
+
+      setTimeout(() => {
+        setSubmitted(false);
+      }, 5000);
+
+    } else {
+      alert(data.message);
+    }
+
+  } catch (error) {
+    console.log(error);
+    alert("Something went wrong");
+  } finally {
+    setIsSubmitting(false);
   }
+};
 
   const handleChange = (e) => {
     setFormData({
